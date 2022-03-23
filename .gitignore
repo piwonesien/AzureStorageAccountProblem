@@ -1,0 +1,7 @@
+.vs
+bin/
+obj/
+packages/
+.my-credentials
+TestResults/
+*.user
