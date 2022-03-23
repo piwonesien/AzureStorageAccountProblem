@@ -49,63 +49,6 @@ namespace AzureTableStorageProblem
 
     public static class PriceDbHandler
     {
-        public static TableClient GetTableConnection(string ConnectionString, PriceTable table)
-        {
-            string tableName;
-
-            switch (table)
-            {
-                case PriceTable.Archive:
-                    tableName = "Archive";
-                    break;
-                case PriceTable.CurrentPrice:
-                    tableName = "CurrentPrices";
-                    break;
-                case PriceTable.CustomerPrice:
-                    tableName = "CustomerPrices";
-                    break;
-                case PriceTable.FuturePrice:
-                    tableName = "FuturePrices";
-                    break;
-                case PriceTable.OfferPrice:
-                    tableName = "OfferPrices";
-                    break;
-                case PriceTable.PriceApprovalStatus:
-                    tableName = "PriceApprovalStatus";
-                    break;
-                case PriceTable.None:
-                default:
-                    throw new ArgumentException("This is not a valide table");
-            }
-
-            return new TableClient(ConnectionString, tableName);
-        }
-
-        public static Dictionary<PriceTable, TableClient> GetConnections()
-        {
-            var DbConnectionString = Environment.GetEnvironmentVariable("BlobConnection");
-            return PriceDbHandler.GetAllTableConnections(DbConnectionString);
-        }
-
-        /// <summary>
-        /// This method returns all table connections in a dict
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <returns></returns>
-        public static Dictionary<PriceTable, TableClient> GetAllTableConnections(string ConnectionString)
-        {
-            return new Dictionary<PriceTable, TableClient>
-            {
-                { PriceTable.Archive, GetTableConnection(ConnectionString, PriceTable.Archive) },
-                { PriceTable.CurrentPrice, GetTableConnection(ConnectionString, PriceTable.CurrentPrice) },
-                { PriceTable.CustomerPrice, GetTableConnection(ConnectionString, PriceTable.CustomerPrice) },
-                { PriceTable.FuturePrice, GetTableConnection(ConnectionString, PriceTable.FuturePrice) },
-                { PriceTable.OfferPrice, GetTableConnection(ConnectionString, PriceTable.OfferPrice) },
-                { PriceTable.PriceApprovalStatus, GetTableConnection(ConnectionString, PriceTable.PriceApprovalStatus) },
-
-            };
-        }
-
         /// <summary>
         /// 
         /// </summary>
