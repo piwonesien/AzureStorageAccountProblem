@@ -15,10 +15,17 @@ namespace AzureTableStorageProblem
             #region Setup
             var blobconnection = "Connectionstring to storage account";
             var path2data = @"Path to dataset.json";
+            TableClientOptions options = new TableClientOptions()
+            {
+                Diagnostics =
+                {
+                    IsLoggingContentEnabled = true
+                }
+            };
 
             // Setup storage account
             Console.WriteLine("Create connection and table");
-            var conn = new TableClient(blobconnection, "futurePrices");
+            var conn = new TableClient(blobconnection, "futurePrices", options);
             conn.CreateIfNotExists();
 
             // Insert data
