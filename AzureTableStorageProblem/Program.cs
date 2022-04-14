@@ -1,7 +1,9 @@
-﻿using Azure.Data.Tables;
+﻿using Azure.Core.Diagnostics;
+using Azure.Data.Tables;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +17,8 @@ namespace AzureTableStorageProblem
             #region Setup
             var blobconnection = "Connectionstring to storage account";
             var path2data = @"Path to dataset.json";
+
+            // Logging
             TableClientOptions options = new TableClientOptions()
             {
                 Diagnostics =
@@ -22,6 +26,26 @@ namespace AzureTableStorageProblem
                     IsLoggingContentEnabled = true
                 }
             };
+            using Stream stream = new FileStream(
+                "consolelog.log",
+                FileMode.OpenOrCreate,
+                FileAccess.Write,
+                FileShare.Read);
+
+            using StreamWriter streamWriter = new StreamWriter(stream)
+            {
+                AutoFlush = true
+            };
+            var logLock = new Object();
+            using AzureEventSourceListener listener = new AzureEventSourceListener((args, message) =>
+            {
+                lock (logLock)
+                {
+                    streamWriter.Write(message);
+                }
+            }, EventLevel.LogAlways);
+
+
 
             // Setup storage account
             Console.WriteLine("Create connection and table");
@@ -80,8 +104,6 @@ namespace AzureTableStorageProblem
                 }
             });
             #endregion
-
-
         }
     }
 }
