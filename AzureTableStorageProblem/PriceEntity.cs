@@ -2,6 +2,7 @@
 using Azure.Data.Tables;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AzureTableStorageProblem
@@ -25,5 +26,28 @@ namespace AzureTableStorageProblem
         public string RowKey { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
+        private static Random random = new Random();
+
+        public static PriceEntity CreateRandomPrice (string PartitionKey)
+        {
+            return new PriceEntity
+            {
+                PartitionKey = PartitionKey,
+                RowKey = RandomString(15),
+                DateFrom = new DateTime(),
+                DateTo = new DateTime(),
+                Price = random.NextDouble(),
+                PriceType = PriceType.BasicPriceLevel0,
+                Runpath = RandomString(30),
+                CustomerId = RandomString(15),
+            };
+        }
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
     }
 }
