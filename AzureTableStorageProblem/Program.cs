@@ -73,7 +73,7 @@ namespace AzureTableStorageProblem
 
             // 3. Delete data
             Console.WriteLine("Delete data from table");
-            //BatchOperation(conn, entries, TableTransactionActionType.Delete);
+            BatchOperation(conn, entries, TableTransactionActionType.Delete);
 
 
 
