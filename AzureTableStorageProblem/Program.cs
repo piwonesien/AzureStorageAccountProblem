@@ -25,6 +25,10 @@ namespace AzureTableStorageProblem
                 Diagnostics =
                 {
                     IsLoggingContentEnabled = true
+                },
+                Retry =
+                {
+                    MaxRetries = 0
                 }
             };
             using Stream stream = new FileStream(
@@ -46,6 +50,9 @@ namespace AzureTableStorageProblem
                 }
             }, EventLevel.LogAlways);
 
+            //// Do HighLoadTest
+            //HighLoadTest.Run(blobconnection);
+            //return;
 
 
             // Setup storage account
@@ -69,7 +76,7 @@ namespace AzureTableStorageProblem
             stopwatch.Stop();
             Console.WriteLine("Succeeded to load  " + entries.Count + " entitites from db:");
             Console.WriteLine("Took: " + stopwatch.ElapsedMilliseconds + "ms (" + stopwatch.Elapsed.ToString("mm\\:ss\\.ff") + ") to load all entities\r\n");
-            
+
 
             // 3. Delete data
             Console.WriteLine("Delete data from table");

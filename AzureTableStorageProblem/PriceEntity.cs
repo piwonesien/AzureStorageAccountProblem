@@ -19,23 +19,24 @@ namespace AzureTableStorageProblem
         public string CustomerId { get; set; }
         public string PriceSource { get; set; }
         public string Status { get; set; }
-        public DateTime Freigegeben_am { get; set; } = new DateTime(1900, 1, 1);
+        //public DateTime Freigegeben_am { get; set; } = new DateTime(1900, 1, 1);
         public string Kommentar_Ablehnung { get; set; }
         public string SupplierItemNumber { get; set; }
         public string PartitionKey { get; set; }
         public string RowKey { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
-        private static Random random = new Random();
+        
 
-        public static PriceEntity CreateRandomPrice (string PartitionKey)
+        public static PriceEntity CreateRandomPrice (string PartitionKey, string index)
         {
+            var random = new Random();
             return new PriceEntity
             {
                 PartitionKey = PartitionKey,
-                RowKey = RandomString(15),
-                DateFrom = new DateTime(),
-                DateTo = new DateTime(),
+                RowKey = RandomString(15) + index,
+                DateFrom = DateTime.UtcNow,
+                DateTo = DateTime.UtcNow,
                 Price = random.NextDouble(),
                 PriceType = PriceType.BasicPriceLevel0,
                 Runpath = RandomString(30),
@@ -45,6 +46,7 @@ namespace AzureTableStorageProblem
 
         public static string RandomString(int length)
         {
+            var random = new Random();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
